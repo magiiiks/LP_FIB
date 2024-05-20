@@ -1,20 +1,63 @@
-import graphviz
+# Generated from hm.g4 by ANTLR 4.13.1
+from antlr4 import *
+if "." in __name__:
+    from .hmParser import hmParser
+else:
+    from hmParser import hmParser
 
-class hmVisitor():
-    
+# This class defines a complete generic visitor for a parse tree produced by hmParser.
 
-    def __init__(self) -> graphviz.Digraph:
-        dot = graphviz.Digraph()
-        dot.edge('run', 'intr')
-        dot.edge('intr', 'runbl')
-        dot.edge('runbl', 'run')
-        dot.edge('run', 'kernel')
-        dot.edge('kernel', 'zombie')
-        dot.edge('kernel', 'sleep')
-        dot.edge('kernel', 'runmem')
-        dot.edge('sleep', 'swap')
-        dot.edge('swap', 'runswap')
-        dot.edge('runswap', 'new')
-        dot.edge('runswap', 'runmem')
-        dot.edge('new', 'runmem')
-        return dot
+class hmVisitor(ParseTreeVisitor):
+
+    # Visit a parse tree produced by hmParser#root.
+    def visitRoot(self, ctx:hmParser.RootContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by hmParser#abstrac.
+    def visitAbstrac(self, ctx:hmParser.AbstracContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by hmParser#identification.
+    def visitIdentification(self, ctx:hmParser.IdentificationContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by hmParser#implication.
+    def visitImplication(self, ctx:hmParser.ImplicationContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by hmParser#numTipus.
+    def visitNumTipus(self, ctx:hmParser.NumTipusContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by hmParser#arithmetic.
+    def visitArithmetic(self, ctx:hmParser.ArithmeticContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by hmParser#unary.
+    def visitUnary(self, ctx:hmParser.UnaryContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by hmParser#parenthesis.
+    def visitParenthesis(self, ctx:hmParser.ParenthesisContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by hmParser#funTipus.
+    def visitFunTipus(self, ctx:hmParser.FunTipusContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by hmParser#value.
+    def visitValue(self, ctx:hmParser.ValueContext):
+        return self.visitChildren(ctx)
+
+
+
+del hmParser

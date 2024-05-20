@@ -2,7 +2,7 @@ import streamlit as st
 from antlr4 import *
 from hmLexer import hmLexer
 from hmParser import hmParser
-from hmVisitor import hmVisitor
+from visitor import treeVisitor
 
 
 st.title("Analitzador de tipus HinNer")
@@ -13,8 +13,11 @@ if (st.button("fer")):
     lexer = hmLexer(input_stream)
     token_stream = CommonTokenStream(lexer)
     parser = hmParser(token_stream)
+    
     tree = parser.root()
     st.write(parser.getNumberOfSyntaxErrors(), 'errors de sintaxi.')
-    st.write(tree.toStringTree(recog=parser))
-    #dot = hmVisitor()
-    #st.graphviz_chart(dot)
+    #st.write(tree.toStringTree(recog=parser))
+    visitor = treeVisitor()
+    dot, taulaTipus = visitor.visit(tree)
+    st.graphviz_chart(dot)
+    st.table(taulaTipus)
