@@ -4,6 +4,11 @@ from hmLexer import hmLexer
 from hmParser import hmParser
 from visitor import treeVisitor
 
+if 'taulaSimbols' not in st.session_state:
+    st.session_state.taulaSimbols = []
+
+if 'taulaTipus' not in st.session_state:
+    st.session_state.taulaTipus = []
 
 st.title("Analitzador de tipus HinNer")
 
@@ -16,8 +21,10 @@ if (st.button("fer")):
     
     tree = parser.root()
     st.write(parser.getNumberOfSyntaxErrors(), 'errors de sintaxi.')
-    #st.write(tree.toStringTree(recog=parser))
-    visitor = treeVisitor()
-    dot, taulaTipus = visitor.visit(tree)
+    visitor = treeVisitor(taulaS=st.session_state.taulaSimbols, taulaT=st.session_state.taulaTipus)
+    dot, taulaT, taulaS = visitor.visit(tree)
+    st.session_state.taulaSimbols = taulaS
+    st.session_state.taulaTipus = taulaT
     st.graphviz_chart(dot)
-    st.table(taulaTipus)
+    tabla = [[st.session_state.taulaSimbols[i], st.session_state.taulaTipus[i]] for i in range(len(st.session_state.taulaSimbols))]
+    st.table(tabla)
