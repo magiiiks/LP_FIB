@@ -18,13 +18,16 @@ if (st.button("fer")):
     lexer = hmLexer(input_stream)
     token_stream = CommonTokenStream(lexer)
     parser = hmParser(token_stream)
-    
+
     tree = parser.root()
     st.write(parser.getNumberOfSyntaxErrors(), 'errors de sintaxi.')
-    visitor = treeVisitor(taulaS=st.session_state.taulaSimbols, taulaT=st.session_state.taulaTipus)
-    dot, taulaT, taulaS = visitor.visit(tree)
+    visitor = treeVisitor(taulaS=st.session_state.taulaSimbols,
+                          taulaT=st.session_state.taulaTipus)
+    dot, dotTipus, taulaT, taulaS = visitor.visit(tree)
     st.session_state.taulaSimbols = taulaS
     st.session_state.taulaTipus = taulaT
-    st.graphviz_chart(dot)
-    tabla = [[st.session_state.taulaSimbols[i], st.session_state.taulaTipus[i]] for i in range(len(st.session_state.taulaSimbols))]
+    tabla = [[st.session_state.taulaSimbols[i], st.session_state.taulaTipus[i]]
+             for i in range(len(st.session_state.taulaSimbols))]
     st.table(tabla)
+    st.graphviz_chart(dot)
+    st.graphviz_chart(dot)
