@@ -23,11 +23,15 @@ if (st.button("fer")):
     st.write(parser.getNumberOfSyntaxErrors(), 'errors de sintaxi.')
     visitor = treeVisitor(taulaS=st.session_state.taulaSimbols,
                           taulaT=st.session_state.taulaTipus)
-    dot, dotTipus, taulaT, taulaS = visitor.visit(tree)
+    dot, dotTipus, taulaT, taulaS, taulaI1, taulaI2 = visitor.visit(tree)
     st.session_state.taulaSimbols = taulaS
     st.session_state.taulaTipus = taulaT
     tabla = [[st.session_state.taulaSimbols[i], st.session_state.taulaTipus[i]]
              for i in range(len(st.session_state.taulaSimbols))]
     st.table(tabla)
     st.graphviz_chart(dot)
-    st.graphviz_chart(dot)
+    st.graphviz_chart(dotTipus)
+    if (len(taulaI1) > 0):
+        tabla1 = [[taulaI1[i], taulaI2[i]]
+                  for i in range(len(taulaI1))]
+        st.table(tabla1)

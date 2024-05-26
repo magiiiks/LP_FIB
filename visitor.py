@@ -7,6 +7,7 @@ else:
 import graphviz
 from dataclasses import dataclass
 from typing import Union
+import copy
 
 # declaracions del tree
 
@@ -28,6 +29,8 @@ class treeVisitor(hmVisitor):
         self.taulaSimbols2 = []
         self.taulaTipus2 = []
         self.valtipus = 'a'
+        self.taulaInferencia1 = []
+        self.taulaInferencia2 = []
 
     def expr_to_dot(self, tree):  # transforma BinTree a Dot
         dot = graphviz.Graph()
@@ -70,6 +73,10 @@ class treeVisitor(hmVisitor):
                 tr = self.inferenciaTipus(tree.right)
                 llarg = False
                 if (isinstance(tl, Node) and isinstance(tr, Node)):
+                    if (tl.tipus == None):
+                        return tl
+                    if (tr.tipus == None):
+                        return tr
                     if (len(tl.tipus) > 8):
                         text = tl.tipus.split()
                         [t1, flexa, t2, flexa, t3] = list(text)
@@ -86,22 +93,32 @@ class treeVisitor(hmVisitor):
                         t1 = tl.tipus
 
                     if (t1 == tr.tipus):
+                        self.taulaInferencia1.append(tree.tipus)
                         if (llarg):
                             tree.tipus = str("("+t2 + " -> " + t3+")")
                         else:
-                            tree.tipus = tr
-                        return tree.tipus
+                            tree.tipus = tr.tipus
+                        self.taulaInferencia2.append(tree.tipus)
+                        return tree
                     else:
-                        return Node(None, None, "Type error: " + tl + " vs " + tr, None)
+                        if (tr.tipus.islower()):
+                            self.taulaInferencia1.append(tree.tipus)
+                            self.taulaInferencia1.append(tr.tipus)
+                            tree.tipus = t1
+                            tr.tipus = t1
+                            self.taulaInferencia2.append(tree.tipus)
+                            self.taulaInferencia2.append(tr.tipus)
+                            return tree
+                        return Node(None, None, "Type error: " + tl.tipus + " vs " + tr.tipus, None)
 
     # Visit a parse tree produced by hmParser#root.
 
     def visitRoot(self, ctx: hmParser.RootContext):
         n = self.visitChildren(ctx)
-        n = self.posarTipus(n)   #falta arreglar que no es copiin els arbres i acabar de fer la inferència de tipus
-        t = n
+        n = self.posarTipus(n)
+        t = copy.deepcopy(n)
         t = self.inferenciaTipus(t)
-        return self.expr_to_dot(n), self.expr_to_dot(t), self.taulaTipus, self.taulaSimbols
+        return self.expr_to_dot(n), self.expr_to_dot(t), self.taulaTipus, self.taulaSimbols, self.taulaInferencia1, self.taulaInferencia2
 
     # Visit a parse tree produced by hmParser#parenthesis.
     def visitParenthesis(self, ctx: hmParser.ParenthesisContext):
