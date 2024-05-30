@@ -8,6 +8,11 @@ Aquest projecte és un "Compilador" d'un llenguatge tipus Haskell per a la assig
 - Arxiu .g4 on està definida la gramàtica del llenguatge.
 - Arxiu hm.py amb el programa del intèrpret i els seu visitador.
 
+## Requisits
+
+- antlr4 instalat al ordinador
+- streamlit per a poder executar el programa
+
 ## Ús
 
 Per a poder executar aquest programa hem de compilar la gramàtica amb la comanda:

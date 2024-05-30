@@ -11,7 +11,6 @@ else:
     from hmVisitor import hmVisitor
 import graphviz
 from dataclasses import dataclass
-from typing import Union
 import copy
 
 # declaracions del tree
