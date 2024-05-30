@@ -4,16 +4,18 @@ root : expr
      ;
 
 expr : OPAR expr CPAR               # parenthesis
-    | (PLUS | MINUS) expr expr      # arithmetic
-    | (PLUS | MINUS) expr           # unary
-    | (PLUS | MINUS) PUNTS TIPUS FLEXA TIPUS FLEXA TIPUS #funTipus
-    | NUM PUNTS TIPUS               # numTipus
-    | expr FLEXA expr               # implication
+    | expr expr                     # implication 
+    | BARRA ID FLEXA expr           # abstrac
+    | expr PUNTS (funtipus | TIPUS) # Tipus
+    | (PLUS | MINUS)                # operator
     | NUM                           # value
-    | BARRA ID                      # abstrac
     | ID                            # identification
     ;
 
+
+funtipus : TIPUS FLEXA funtipus      #funTipus 
+         | TIPUS FLEXA TIPUS         #finTipus
+         ;
 
 OPAR : '(' ;
 CPAR : ')' ;

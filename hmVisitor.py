@@ -29,18 +29,8 @@ class hmVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by hmParser#numTipus.
-    def visitNumTipus(self, ctx:hmParser.NumTipusContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by hmParser#arithmetic.
-    def visitArithmetic(self, ctx:hmParser.ArithmeticContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by hmParser#unary.
-    def visitUnary(self, ctx:hmParser.UnaryContext):
+    # Visit a parse tree produced by hmParser#Tipus.
+    def visitTipus(self, ctx:hmParser.TipusContext):
         return self.visitChildren(ctx)
 
 
@@ -49,13 +39,23 @@ class hmVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by hmParser#value.
+    def visitValue(self, ctx:hmParser.ValueContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by hmParser#operator.
+    def visitOperator(self, ctx:hmParser.OperatorContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by hmParser#funTipus.
     def visitFunTipus(self, ctx:hmParser.FunTipusContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by hmParser#value.
-    def visitValue(self, ctx:hmParser.ValueContext):
+    # Visit a parse tree produced by hmParser#finTipus.
+    def visitFinTipus(self, ctx:hmParser.FinTipusContext):
         return self.visitChildren(ctx)
 
 

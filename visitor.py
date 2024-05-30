@@ -54,7 +54,7 @@ class treeVisitor(hmVisitor):
             else:
                 if (tree.val in self.taulaSimbols2 and tree.val != "@"):
                     i = self.taulaSimbols2.index(tree.val)
-                    tree.tipus = self.taulaTipus2
+                    tree.tipus = self.taulaTipus2[i]
                 else:
                     tree.tipus = self.valtipus
                     self.taulaSimbols2.append(tree.val)
@@ -120,59 +120,58 @@ class treeVisitor(hmVisitor):
         t = self.inferenciaTipus(t)
         return self.expr_to_dot(n), self.expr_to_dot(t), self.taulaTipus, self.taulaSimbols, self.taulaInferencia1, self.taulaInferencia2
 
-    # Visit a parse tree produced by hmParser#parenthesis.
-    def visitParenthesis(self, ctx: hmParser.ParenthesisContext):
-        return self.visitChildren(ctx)
+    # Visit a parse tree produced by hmParser#abstrac.
+    def visitAbstrac(self, ctx: hmParser.AbstracContext):
+        [barra, id, flexa, expr] = list(ctx.getChildren())
+        e = self.visit(expr)
+        i = Node(None, None, id.getText(), None)
+        return Node(i, e, "λ", None)
 
-    # Visit a parse tree produced by hmParser#arithmetic.
-    def visitArithmetic(self, ctx: hmParser.ArithmeticContext):
-        [operador, expr1, expr2] = list(ctx.getChildren())
-        op = Node(None, None, operador.getText(), None)
-        e1 = self.visit(expr1)
-        e2 = self.visit(expr2)
-
-        n1 = Node(op, e1, "@", None)
-        n2 = Node(n1, e2, "@", None)
-        return n2
-
-    # Visit a parse tree produced by hmParser#unary.
-    def visitUnary(self, ctx: hmParser.UnaryContext):
-        return self.visitChildren(ctx)
+    # Visit a parse tree produced by hmParser#identification.
+    def visitIdentification(self, ctx: hmParser.IdentificationContext):
+        return Node(None, None, ctx.getText(), None)
 
     # Visit a parse tree produced by hmParser#implication.
     def visitImplication(self, ctx: hmParser.ImplicationContext):
-        [expr1, operador, expr2] = list(ctx.getChildren())
+        [expr1, expr2] = list(ctx.getChildren())
         e1 = self.visit(expr1)
         e2 = self.visit(expr2)
-        return Node(e1, e2, "λ", None)
 
-    # Visit a parse tree produced by hmParser#numTipus.
-    def visitNumTipus(self, ctx: hmParser.NumTipusContext):
-        [expr1, punts, tipus] = list(ctx.getChildren())
-        if (not expr1.getText() in self.taulaSimbols):
-            self.taulaTipus.append(tipus.getText())
-            self.taulaSimbols.append(expr1.getText())
+        return Node(e1, e2, "@", None)
+
+    # Visit a parse tree produced by hmParser#Tipus.
+    def visitTipus(self, ctx: hmParser.TipusContext):
+        if (ctx.TIPUS()):
+            [expr1, punts, tipus] = list(ctx.getChildren())
+            if (not expr1.getText() in self.taulaSimbols):
+                self.taulaTipus.append(tipus.getText())
+                self.taulaSimbols.append(expr1.getText())
+
+        else:
+            [expr1, punts, tipus] = list(ctx.getChildren())
+            t = self.visit(tipus)
+            if (not expr1.getText() in self.taulaSimbols):
+                self.taulaTipus.append(t)
+                self.taulaSimbols.append(expr1.getText())
         return
 
-    # Visit a parse tree produced by hmParser#funTipus.
-    def visitFunTipus(self, ctx: hmParser.FunTipusContext):
-        [expr1, punts, t1, f1, t2, f2, t3] = list(ctx.getChildren())
-        if (not expr1.getText() in self.taulaSimbols):
-            self.taulaTipus.append(
-                str("(" + t1.getText() + " -> (" + t2.getText() + " -> " + t3.getText() + "))"))
-            self.taulaSimbols.append(expr1.getText())
-        return self.visitChildren(ctx)
+    # Visit a parse tree produced by hmParser#parenthesis.
+    def visitParenthesis(self, ctx: hmParser.ParenthesisContext):
+        return self.visit(ctx.expr())
 
     # Visit a parse tree produced by hmParser#value.
     def visitValue(self, ctx: hmParser.ValueContext):
         return Node(None, None, ctx.getText(), None)
 
-    # Visit a parse tree produced by hmParser#abstrac.
-    def visitAbstrac(self, ctx: hmParser.AbstracContext):
-        [barra, expr1] = list(ctx.getChildren())
-        e1 = self.visit(expr1)
-        return Node(None, None, expr1.getText(), None)
-
-    # Visit a parse tree produced by hmParser#identification.
-    def visitIdentification(self, ctx: hmParser.IdentificationContext):
+    # Visit a parse tree produced by hmParser#operator.
+    def visitOperator(self, ctx: hmParser.OperatorContext):
         return Node(None, None, ctx.getText(), None)
+
+    # Visit a parse tree produced by hmParser#funTipus.
+    def visitFunTipus(self, ctx: hmParser.FunTipusContext):
+        t = self.visit(ctx.funtipus())
+        return str("("+ctx.TIPUS().getText()+" -> "+t+")")
+
+    # Visit a parse tree produced by hmParser#finTipus.
+    def visitFinTipus(self, ctx: hmParser.FinTipusContext):
+        return str("("+ctx.TIPUS(0).getText()+" -> "+ctx.TIPUS(1).getText()+")")
