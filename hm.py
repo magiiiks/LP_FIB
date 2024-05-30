@@ -25,6 +25,7 @@ class Node:
     tipus: str
 
 
+# declaracions de la taula de simbols
 if 'taulaSimbols' not in st.session_state:
     st.session_state.taulaSimbols = []
 
@@ -56,7 +57,7 @@ class treeVisitor(hmVisitor):
         add_nodes_edges(tree)
         return dot
 
-    def posarTipus(self, tree):
+    def posarTipus(self, tree):  # posa els tipus en el arbre
         if isinstance(tree, Node):
             if (tree.val in self.taulaSimbols):
                 i = self.taulaSimbols.index(tree.val)
@@ -74,7 +75,7 @@ class treeVisitor(hmVisitor):
             self.posarTipus(tree.right)
         return tree
 
-    def inferenciaTipus(self, tree):
+    def inferenciaTipus(self, tree):  # fa la inferencia de tipus
         if isinstance(tree, Node):
             if (tree.left == None and tree.right == None):
                 if (tree.tipus in self.taulaInferencia1):
@@ -213,13 +214,16 @@ if (st.button("fer")):
     dot, dotTipus, taulaT, taulaS, taulaI1, taulaI2 = visitor.visit(tree)
     st.session_state.taulaSimbols = taulaS
     st.session_state.taulaTipus = taulaT
-    st.write("Taula de símbols:")
-    tabla = [[st.session_state.taulaSimbols[i], st.session_state.taulaTipus[i]]
-             for i in range(len(st.session_state.taulaSimbols))]
-    st.table(tabla)
+    if (len(st.session_state.taulaSimbols) > 0):  # nomes mostrarem la taula si te tipus emmagatzemats
+        st.write("Taula de símbols:")
+        tabla = [[st.session_state.taulaSimbols[i], st.session_state.taulaTipus[i]]
+                 for i in range(len(st.session_state.taulaSimbols))]
+        st.table(tabla)
     st.graphviz_chart(dot)
-    st.graphviz_chart(dotTipus)
-    if (len(taulaI1) > 0):
-        tabla1 = [[taulaI1[i], taulaI2[i]]
-                  for i in range(len(taulaI1)-1, -1, -1)]
-        st.table(tabla1)
+    # nomes farem inferència de tipus si tinc tipus emmagatzemats
+    if (len(st.session_state.taulaSimbols) > 0):
+        st.graphviz_chart(dotTipus)
+        if (len(taulaI1) > 0):  # nomes mostrarem la taula si te tipus emmagatzemats
+            tabla1 = [[taulaI1[i], taulaI2[i]]
+                      for i in range(len(taulaI1)-1, -1, -1)]
+            st.table(tabla1)

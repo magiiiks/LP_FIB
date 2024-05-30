@@ -24,4 +24,4 @@ streamlit run hm.py
 
 ## Autor
 
-Magí Rull
+**Magí Rull Jiménez** - *L'analitzador de tipus HinNer* - [GitHub](https://github.com/magiiiks/LP_FIB)
