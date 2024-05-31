@@ -208,21 +208,23 @@ if (st.button("fer")):
 
     tree = parser.root()
     st.write(parser.getNumberOfSyntaxErrors(), 'Errors de sintaxi.')
-    visitor = treeVisitor(taulaS=st.session_state.taulaSimbols,
-                          taulaT=st.session_state.taulaTipus)
-    dot, dotTipus, taulaT, taulaS, taulaI1, taulaI2 = visitor.visit(tree)
-    st.session_state.taulaSimbols = taulaS
-    st.session_state.taulaTipus = taulaT
-    if (len(st.session_state.taulaSimbols) > 0):  # nomes mostrarem la taula si te tipus emmagatzemats
-        st.write("Taula de símbols:")
-        tabla = [[st.session_state.taulaSimbols[i], st.session_state.taulaTipus[i]]
-                 for i in range(len(st.session_state.taulaSimbols))]
-        st.table(tabla)
-    st.graphviz_chart(dot)
-    # nomes farem inferència de tipus si tinc tipus emmagatzemats
-    if (len(st.session_state.taulaSimbols) > 0):
-        st.graphviz_chart(dotTipus)
-        if (len(taulaI1) > 0):  # nomes mostrarem la taula si te tipus emmagatzemats
-            tabla1 = [[taulaI1[i], taulaI2[i]]
-                      for i in range(len(taulaI1)-1, -1, -1)]
-            st.table(tabla1)
+    if (parser.getNumberOfSyntaxErrors() == 0):  # nomes farem l'arbre si no hi ha errors
+        visitor = treeVisitor(taulaS=st.session_state.taulaSimbols,
+                              taulaT=st.session_state.taulaTipus)
+        dot, dotTipus, taulaT, taulaS, taulaI1, taulaI2 = visitor.visit(tree)
+        st.session_state.taulaSimbols = taulaS
+        st.session_state.taulaTipus = taulaT
+        # nomes mostrarem la taula si te tipus emmagatzemats
+        if (len(st.session_state.taulaSimbols) > 0):
+            st.write("Taula de símbols:")
+            tabla = [[st.session_state.taulaSimbols[i], st.session_state.taulaTipus[i]]
+                     for i in range(len(st.session_state.taulaSimbols))]
+            st.table(tabla)
+        st.graphviz_chart(dot)
+        # nomes farem inferència de tipus si tinc tipus emmagatzemats
+        if (len(st.session_state.taulaSimbols) > 0):
+            st.graphviz_chart(dotTipus)
+            if (len(taulaI1) > 0):  # nomes mostrarem la taula si te tipus emmagatzemats
+                tabla1 = [[taulaI1[i], taulaI2[i]]
+                          for i in range(len(taulaI1)-1, -1, -1)]
+                st.table(tabla1)

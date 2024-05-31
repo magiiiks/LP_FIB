@@ -27,6 +27,8 @@ Després hem d'executar el programa principal amb streamlit amb la comanda:
 streamlit run hm.py
 ```
 
+Cal destacar que hi ha funcionalitats de l'analitzador que només es duen a terme si son possibles. Per exemple: No es realitza inferència de tipus si no tenim tipus emmagatzemats en la taula. Per tant si volem que l'analitzador realitzi totes les funcions possibles, primer s'han de declarar els tipus i després les funcions a analitzar.
+
 ## Autor
 
 **Magí Rull Jiménez** - *L'analitzador de tipus HinNer* - [GitHub](https://github.com/magiiiks/LP_FIB)
