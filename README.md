@@ -5,8 +5,8 @@ Aquest projecte és un "Compilador" d'un llenguatge tipus Haskell per a la assig
 
 ## Continguts
 
-- Arxiu .g4 on està definida la gramàtica del llenguatge.
-- Arxiu hm.py amb el programa del intèrpret i els seu visitador.
+- Arxiu hm.g4 on està definida la gramàtica del llenguatge.
+- Arxiu hm.py amb el programa del intèrpret i el seu visitador.
 
 ## Requisits
 
